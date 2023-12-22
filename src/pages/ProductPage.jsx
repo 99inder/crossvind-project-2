@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import data from '../assets/uavsData';
-import { motion } from 'framer-motion';
+import { motion, useAnimationControls } from 'framer-motion';
 
 const ProductPage = () => {
     const [selectedItemData, setSelectedItemData] = useState(data[0]);
@@ -9,10 +9,8 @@ const ProductPage = () => {
     const audioRef = useRef();
     const sourceRef = useRef();
 
-    useEffect(() => {
-        // To fix the on load scroll issue with framer motion
-        scrollTo({ top: 0, left: 0, behavior: 'instant' });
-    }, []);
+    const imageControls = useAnimationControls();
+    const specsControls = useAnimationControls();
 
     function formatString(input) {
         // Replace underscores with spaces
@@ -32,25 +30,39 @@ const ProductPage = () => {
             audioRef.current.currentTime = 0;
             audioRef.current.load(audioSrc);
         }
+
+        // animation controls for animating on state change
+        imageControls.start('final');
+        imageControls.set('initial');
+        imageControls.start('final');
+
+        specsControls.start('final');
+        specsControls.set('initial');
+        specsControls.start('final');
     }, [selectedItemData])
 
     return (
         <div className='flex flex-col justify-between lg:flex-row gap-16 lg:items-center'>
-            <motion.div
-                initial={{
-                    scale: 0,
-                    opacity: 0.5
-                }}
-                animate={{
-                    scale: 1,
-                    opacity: 1
-                }}
-                transition={{
-                    duration: 0.5,
-                }}
+            <div
+
                 className='flex flex-col gap-6 lg:w-2/4'
             >
-                <img
+                <motion.img
+                    variants={{
+                        initial: {
+                            scale: 0,
+                            opacity: 0.5
+                        },
+                        final: {
+                            scale: 1,
+                            opacity: 1
+                        }
+                    }}
+                    initial='initial'
+                    animate={imageControls}
+                    transition={{
+                        duration: 0.5,
+                    }}
                     src={imgSrc} alt={name} className='w-full h-full aspect-square object-cover rounded-xl shadow-neutral-500 shadow-lg drop-shadow-2xl'
                 />
                 <motion.div
@@ -74,22 +86,28 @@ const ProductPage = () => {
                             src={item.imgSrc}
                             alt={"img-" + item.id}
                             className={`w-24 h-24 rounded-md cursor-pointer duration-200 shadow-sky-200 shadow-lg scale-110 ${id !== item.id && "blur-[2px] shadow-none hover:blur-none scale-95 hover:scale-100"} transition-all duration-200`}
-                            onClick={() => setSelectedItemData(item)}
+                            onClick={() => {
+                                setSelectedItemData(item)
+                            }}
                         />
                     ))}
                 </motion.div>
-            </motion.div>
+            </div>
 
             {/* DETAILS */}
             <motion.div
-                initial={{
-                    opacity: 0,
-                    x: '50%'
+                variants={{
+                    initial: {
+                        opacity: 0,
+                        x: '50%'
+                    },
+                    final: {
+                        opacity: 1,
+                        x: 0
+                    }
                 }}
-                animate={{
-                    opacity: 1,
-                    x: 0
-                }}
+                initial='initial'
+                animate={specsControls}
                 transition={{
                     duration: 0.5,
                 }}

@@ -48,20 +48,26 @@ const Navbar = () => {
                 <a href='/' className='logo'>
                     <img src={logo} alt='logo' />
                 </a>
-                <div className='hamburger' onClick={toggleMenu}>
-                    {isMenuOpen ? (<FaTimes size={30} />)
-                        : (<FaBars size={30} />)}
+                {
+                    (data && data.length > 0)
+                    &&
+                    <>
+                        <div className='hamburger' onClick={toggleMenu}>
+                            {isMenuOpen ? (<FaTimes size={30} />)
+                                : (<FaBars size={30} />)}
+                        </div>
 
-                </div>
-                <ul className={`${isMenuOpen ? "nav-menu active" : "nav-menu"} ${color && "scrolled"}`}>
-                    {
-                        data.map((linkData) => (
-                            <li className='nav-item' key={linkData.id}>
-                                <a href={linkData.link} onClick={toggleMenu}>{linkData.title}</a>
-                            </li>
-                        ))
-                    }
-                </ul>
+                        <ul className={`${isMenuOpen ? "nav-menu active" : "nav-menu"} ${color && "scrolled"}`}>
+                            {
+                                data.map((linkData) => (
+                                    <li className='nav-item' key={linkData.id}>
+                                        <a href={linkData.link} onClick={toggleMenu}>{linkData.title}</a>
+                                    </li>
+                                ))
+                            }
+                        </ul>
+                    </>
+                }
             </nav>
         </div>
     )
