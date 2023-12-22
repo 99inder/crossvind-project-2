@@ -5,9 +5,9 @@ import ProductPage from './pages/ProductPage.jsx'
 function App() {
 
   return (
-    <div className="max-w-7xl mx-auto p-8">
+    <div className="p-8 pb-16 overflow-hidden min-h-screen relative">
       <Header />
-      <main className="mt-[90px]">
+      <main className="mt-[90px] max-w-7xl mx-auto">
         <ProductPage />
       </main>
       <Footer />
